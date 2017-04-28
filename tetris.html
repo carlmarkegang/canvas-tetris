@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+
+</head>
+<body>
+
+<canvas id="canvas" style="box-shadow: 1px 1px 31px #929292;"></canvas>
+<script src="blocks.js"></script>
+<script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    canvas.width = 500;
+    canvas.height = 600;
+    var cube = new Image();
+    cube.src = 'cube.png';
+
+    var collisionRight = 0;
+    var collisionLeft = 0;
+    var rotation = 1;
+    var lockblock = 0;
+    var blocksOnThisLevel = 0;
+    //var blocktype = Math.floor(Math.random() * 3) + 1;
+
+    var keysDown = {};
+    window.addEventListener('keydown', function (e) {
+        keysDown[e.keyCode] = true;
+        update();
+    });
+    window.addEventListener('keyup', function (e) {
+        delete keysDown[e.keyCode];
+    });
+
+    function update(mod) {
+        for (var t = 0; t < playerBlocks.length; t++) {
+            if (68 in keysDown && collisionRight != 1) {
+                playerBlocks[t].x += 20;
+            }
+            if (65 in keysDown && collisionLeft != 1) {
+                playerBlocks[t].x -= 20;
+            }
+        }
+
+        if (87 in keysDown) {
+            spinBlock();
+            rotation++;
+        }
+
+        if (83 in keysDown) {
+            fall();
+        } else {
+            console.log(keysDown + "random block:" + blocktype + "placement " + (playerBlocks[0].x + (playerRotationModifers[0].x * 20)) + " " + 200);
+        }
+
+    }
+
+    function remove_row(row) {
+        for (var t = 0; t < block.length; t++) {
+            if (block[t].y == row) {
+                delete block[t].y;
+                delete block[t].x;
+                delete block[t].color;
+                delete block[t].width;
+                delete block[t].height;
+            }
+            block[t].y += 20;
+        }
+    }
+
+    function fall() {
+
+        for (var i = 0; i < playerBlocks.length; i++) {
+            if (playerBlocks[i].y + (playerRotationModifers[i].y * 20) >= canvas.height - 20) {
+                lockblock = 1;
+                break;
+            }
+
+            // Landning collision
+            for (var t = 0; t < block.length; t++) {
+                if (playerBlocks[i].y + (playerRotationModifers[i].y * 20) == block[t].y - 20 && playerBlocks[i].x + (playerRotationModifers[i].x * 20) == block[t].x) {
+                    lockblock = 1;
+                    break;
+                }
+            }
+        }
+
+        if (lockblock == 0) {
+            for (var i = 0; i < playerBlocks.length; i++) {
+                playerBlocks[i].y += 20;
+            }
+        } else {
+            for (var t = 0; t < playerBlocks.length; t++) {
+                block.push(new create_blocks(playerBlocks[t].x + (playerRotationModifers[t].x * 20), playerBlocks[t].y + (playerRotationModifers[t].y * 20)));
+                playerBlocks[t].y = 0;
+                playerBlocks[t].x = 240;
+            }
+            lockblock = 0;
+            randomBlock();
+        }
+
+
+        loop1: for (var i = 0; i < 30; i++) {
+            loop2: for (var t = 0; t < block.length; t++) {
+                if (block[t].y == i * 20) {
+                    blocksOnThisLevel++;
+                    if (blocksOnThisLevel >= 25) {
+                        remove_row(i * 20);
+
+                        for (var x = 0; x < block.length; x++) {
+                            block[x].y += 20;
+                        }
+                    }
+                }
+            }
+            blocksOnThisLevel = 0;
+        }
+    }
+
+    var playerBlocks = [];
+
+    function create_player(x, y) {
+        this.x = x;
+        this.y = y;
+        this.color = "purple";
+        this.width = 20;
+        this.height = 20;
+    }
+
+    var playerRotationModifers = [];
+
+    function create_player_rotation_modifier(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    //Spawn player blocks
+    playerRotationModifers.push(new create_player_rotation_modifier(0, 0));
+    playerRotationModifers.push(new create_player_rotation_modifier(0, 0));
+    playerRotationModifers.push(new create_player_rotation_modifier(0, 0));
+    playerRotationModifers.push(new create_player_rotation_modifier(0, 0));
+    //L
+    playerBlocks.push(new create_player(240, 0));
+    playerBlocks.push(new create_player(240, 0));
+    playerBlocks.push(new create_player(240, 0));
+    playerBlocks.push(new create_player(240, 0));
+
+    var block = [];
+    function create_blocks(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    //spawn block
+    block.push(new create_blocks(0, canvas.height + 500));
+
+    randomBlock();
+
+    function draw() {
+        // Background and Grid
+        ctx.fillStyle = "#f4f4f4";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        for (i = 0; i < 40; i++) {
+            ctx.fillStyle = "#ededed";
+            for (i2 = 0; i2 < 25; i2++) {
+                ctx.fillRect(i2 * 40, i * 40, playerBlocks[0].width, playerBlocks[0].height);
+            }
+        }
+        for (i = 0; i < 40; i++) {
+            for (i2 = 0; i2 < 25; i2++) {
+                ctx.fillRect(i2 * 40 + 20, i * 40 + 20, playerBlocks[0].width, playerBlocks[0].height);
+            }
+        }
+        // END Background and Grid
+
+        // Draw playerBlocks
+        ctx.fillStyle = "purple";
+        for (var i = 0; i < playerBlocks.length; i++) {
+            ctx.fillRect(playerBlocks[i].x + (playerRotationModifers[i].x * 20), playerBlocks[i].y + (playerRotationModifers[i].y * 20), playerBlocks[i].width, playerBlocks[i].height);
+
+            //No haxing allowed
+            if ((playerBlocks[i].x + (playerRotationModifers[i].x * 20)) > canvas.width - 20) {
+                for (var t = 0; t < playerBlocks.length; t++) {
+                    playerBlocks[t].x -= 20;
+                }
+            }
+        }
+
+        for (var t = 0; t < block.length; t++) {
+            ctx.fillRect(block[t].x, block[t].y, 20, 20);
+
+        }
+
+
+        // collision right
+        loop1:
+            for (var i = 0; i < playerBlocks.length; i++) {
+                loop2: for (var t = 0; t < block.length; t++) {
+
+                    if (playerBlocks[i].y + (playerRotationModifers[i].y * 20) == block[t].y && playerBlocks[i].x + (playerRotationModifers[i].x * 20) == block[t].x - 20 || (playerBlocks[i].x + (playerRotationModifers[i].x * 20)) >= canvas.width - 20) {
+                        collisionRight = 1;
+                        break loop1;
+                        break loop2;
+                    } else {
+                        collisionRight = 0;
+                    }
+                }
+            }
+
+        // collision left
+        loop3:
+            for (var i = 0; i < playerBlocks.length; i++) {
+                loop4: for (var t = 0; t < block.length; t++) {
+                    if (playerBlocks[i].y + (playerRotationModifers[i].y * 20) == block[t].y && playerBlocks[i].x + (playerRotationModifers[i].x * 20) == block[t].x + 20 || playerBlocks[i].x + (playerRotationModifers[i].x * 20) <= 0) {
+                        collisionLeft = 1;
+                        break loop3;
+                        break loop4;
+                    } else {
+                        collisionLeft = 0;
+                    }
+                }
+            }
+
+
+    }
+
+    setInterval(fall, 100);
+    setInterval(draw, 30);
+</script>
+<div id="collision"></div>
+</body>
+</html>
