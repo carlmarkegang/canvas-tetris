@@ -55,18 +55,6 @@
 
     }
 
-    function remove_row(row) {
-        for (var t = 0; t < block.length; t++) {
-            if (block[t].y == row) {
-                delete block[t].y;
-                delete block[t].x;
-                delete block[t].color;
-                delete block[t].width;
-                delete block[t].height;
-            }
-        }
-    }
-
     function fall() {
 
         for (var i = 0; i < playerBlocks.length; i++) {
@@ -99,17 +87,23 @@
         }
 
 
-        loop1: for (var i = 0; i < 30; i++) {
-            loop2: for (var t = 0; t < block.length; t++) {
+        for (var i = 0; i < 30; i++) {
+            for (var t = 0; t < block.length; t++) {
                 if (block[t].y == i * 20) {
                     blocksOnThisLevel++;
-                    if (blocksOnThisLevel >= 5) {
-                        remove_row(i * 20);
-
-                        for (var x = 0; x < block.length; x++) {
-                            block[x].y += 20;
+                    if (blocksOnThisLevel >= 25) {
+                        //remove_row();
+                        for (var t = 0; t < block.length; t++) {
+                            if (block[t].y == i * 20) {
+                                delete block[t].y;
+                                delete block[t].x;
+                                delete block[t].color;
+                                delete block[t].width;
+                                delete block[t].height;
+                            }
+                            block[t].y += 20;
                         }
-                        break loop2; break loop1;
+
                     }
                 }
             }
