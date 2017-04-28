@@ -64,7 +64,6 @@
                 delete block[t].width;
                 delete block[t].height;
             }
-            block[t].y += 20;
         }
     }
 
@@ -104,12 +103,13 @@
             loop2: for (var t = 0; t < block.length; t++) {
                 if (block[t].y == i * 20) {
                     blocksOnThisLevel++;
-                    if (blocksOnThisLevel >= 25) {
+                    if (blocksOnThisLevel >= 5) {
                         remove_row(i * 20);
 
                         for (var x = 0; x < block.length; x++) {
                             block[x].y += 20;
                         }
+                        break loop2; break loop1;
                     }
                 }
             }
@@ -182,6 +182,11 @@
                     playerBlocks[t].x -= 20;
                 }
             }
+            if ((playerBlocks[i].x + (playerRotationModifers[i].x * 20)) < 0) {
+                for (var t = 0; t < playerBlocks.length; t++) {
+                    playerBlocks[t].x += 20;
+                }
+            }
         }
 
         for (var t = 0; t < block.length; t++) {
@@ -222,7 +227,7 @@
 
     }
 
-    setInterval(fall, 100);
+    setInterval(fall, 700);
     setInterval(draw, 30);
 </script>
 <div id="collision"></div>
