@@ -17,6 +17,7 @@
     var cube2 = new Image();cube2.src = 'cube2.png';
     var cube3 = new Image();cube3.src = 'cube3.png';
     var cube4 = new Image();cube4.src = 'cube4.png';
+    var cube5 = new Image();cube5.src = 'cube5.png';
 
     var collisionRight = 0;
     var collisionLeft = 0;
@@ -27,6 +28,7 @@
     var red = Math.floor(Math.random() * 255) + 1;
     var blue = Math.floor(Math.random() * 255) + 1;
     var green = Math.floor(Math.random() * 255) + 1;
+    var points = 0;
 
     var keysDown = {};
     window.addEventListener('keydown', function (e) {
@@ -76,6 +78,8 @@
         red = Math.floor(Math.random() * 255) + 1;
         blue = Math.floor(Math.random() * 255) + 1;
         green = Math.floor(Math.random() * 255) + 1;
+        points+=100;
+        document.getElementById("points").innerHTML = points + " points";
     }
 
     function fall() {
@@ -103,7 +107,7 @@
             for (var t = 0; t < playerBlocks.length; t++) {
                 block.push(new create_blocks(playerBlocks[t].x + (playerRotationModifers[t].x * 20), playerBlocks[t].y + (playerRotationModifers[t].y * 20), color));
                 playerBlocks[t].y = 0;
-                playerBlocks[t].x = 240;
+                playerBlocks[t].x = canvas.width/2;
             }
             lockblock = 0;
             randomBlock();
@@ -239,6 +243,6 @@
     setInterval(fall, 700);
     setInterval(draw, 30);
 </script>
-<div id="collision"></div>
+<div id="points"></div>
 </body>
 </html>
