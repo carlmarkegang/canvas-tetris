@@ -13,14 +13,15 @@
     var ctx = canvas.getContext("2d");
     canvas.width = 500;
     canvas.height = 600;
-    var cube = new Image();
-    cube.src = 'cube.png';
+    var cube = new Image();cube.src = 'cube.png';
+    var cube2 = new Image();cube2.src = 'cube.png2';
 
     var collisionRight = 0;
     var collisionLeft = 0;
     var rotation = 1;
     var lockblock = 0;
     var blocksOnThisLevel = 0;
+    var deleteblocksamount = 0;
     //var blocktype = Math.floor(Math.random() * 3) + 1;
 
     var keysDown = {};
@@ -34,25 +35,42 @@
 
     function update(mod) {
         for (var t = 0; t < playerBlocks.length; t++) {
-            if (68 in keysDown && collisionRight != 1) {
+            if (68 in keysDown && collisionRight != 1 || 39 in keysDown && collisionRight != 1) {
                 playerBlocks[t].x += 20;
             }
-            if (65 in keysDown && collisionLeft != 1) {
+            if (65 in keysDown && collisionLeft != 1 || 37 in keysDown && collisionLeft != 1) {
                 playerBlocks[t].x -= 20;
             }
         }
 
-        if (87 in keysDown) {
+        if (87 in keysDown || 38 in keysDown) {
             spinBlock();
             rotation++;
         }
 
-        if (83 in keysDown) {
+        if (83 in keysDown || 40 in keysDown) {
             fall();
         } else {
-            console.log(keysDown + "random block:" + blocktype + "placement " + (playerBlocks[0].x + (playerRotationModifers[0].x * 20)) + " " + 200);
+            console.log("random block:" + blocktype + "placement " + (playerBlocks[0].x + (playerRotationModifers[0].x * 20)) + " " + 200);
+            console.log(keysDown);
         }
 
+    }
+
+    function remove_row(row){
+
+        for (var t = 0; t < block.length; t++) {
+            if (block[t].y == row) {
+                delete block[t].y;
+                delete block[t].x;
+                delete block[t].color;
+                delete block[t].width;
+                delete block[t].height;
+            }
+            block[t].y += 20;
+            console.log("hej");
+
+        }
     }
 
     function fall() {
@@ -87,22 +105,13 @@
         }
 
 
-        for (var i = 0; i < 30; i++) {
-            for (var t = 0; t < block.length; t++) {
-                if (block[t].y == i * 20) {
+        blockloop: for (var i = 0; i < 30; i++) {
+            blockloop2: for (var t = 0; t < block.length; t++) {
+                 if (block[t].y == i * 20) {
                     blocksOnThisLevel++;
-                    if (blocksOnThisLevel >= 25) {
-                        //remove_row();
-                        for (var t = 0; t < block.length; t++) {
-                            if (block[t].y == i * 20) {
-                                delete block[t].y;
-                                delete block[t].x;
-                                delete block[t].color;
-                                delete block[t].width;
-                                delete block[t].height;
-                            }
-                            block[t].y += 20;
-                        }
+                    if (blocksOnThisLevel >= canvas.width/20) {
+                        remove_row(i * 20);
+                        break blockloop2;
 
                     }
                 }
@@ -168,7 +177,8 @@
         // Draw playerBlocks
         ctx.fillStyle = "purple";
         for (var i = 0; i < playerBlocks.length; i++) {
-            ctx.fillRect(playerBlocks[i].x + (playerRotationModifers[i].x * 20), playerBlocks[i].y + (playerRotationModifers[i].y * 20), playerBlocks[i].width, playerBlocks[i].height);
+            //ctx.fillRect(playerBlocks[i].x + (playerRotationModifers[i].x * 20), playerBlocks[i].y + (playerRotationModifers[i].y * 20), playerBlocks[i].width, playerBlocks[i].height);
+            ctx.drawImage(cube,playerBlocks[i].x + (playerRotationModifers[i].x * 20), playerBlocks[i].y + (playerRotationModifers[i].y * 20));
 
             //No haxing allowed
             if ((playerBlocks[i].x + (playerRotationModifers[i].x * 20)) > canvas.width - 20) {
@@ -184,8 +194,8 @@
         }
 
         for (var t = 0; t < block.length; t++) {
-            ctx.fillRect(block[t].x, block[t].y, 20, 20);
-
+            //ctx.fillRect(block[t].x, block[t].y, 20, 20);
+            ctx.drawImage(cube, block[t].x, block[t].y);
         }
 
 
