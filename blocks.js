@@ -1,13 +1,20 @@
 ﻿function randomBlock() {
-    blocktype = Math.floor(Math.random() * 3) + 1;
+    blocktype = Math.floor(Math.random() * 4) + 1;
     rotation = 1;
     if (blocktype == 1) {
         L_block();
+        color = cube1;
     } else if (blocktype == 2) {
         I_block();
+        color = cube2;
     }
     else if (blocktype == 3) {
         I_L_block();
+        color = cube3;
+    }
+    else if (blocktype == 4) {
+        O_block();
+        color = cube4;
     }
 }
 
@@ -46,6 +53,18 @@ function I_L_block() {
     playerRotationModifers[2].x = -1;
     playerRotationModifers[2].y = 0;
     playerRotationModifers[3].x = 1;
+    playerRotationModifers[3].y = 1;
+}
+
+//O BLOCK
+function O_block() {
+    playerRotationModifers[0].x = 0;
+    playerRotationModifers[0].y = 0;
+    playerRotationModifers[1].x = 1;
+    playerRotationModifers[1].y = 0;
+    playerRotationModifers[2].x = 1;
+    playerRotationModifers[2].y = 1;
+    playerRotationModifers[3].x = 0;
     playerRotationModifers[3].y = 1;
 }
 
@@ -194,5 +213,5 @@ function spinBlock() {
             playerRotationModifers[3].y = -1;
             rotation = 0;
         }
-    }
+    }  else if (blocktype == 4) {}
 }

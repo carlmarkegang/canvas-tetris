@@ -11,18 +11,19 @@
 <script>
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
-    canvas.width = 500;
+    canvas.width = 240;
     canvas.height = 600;
-    var cube = new Image();cube.src = 'cube.png';
-    var cube2 = new Image();cube2.src = 'cube.png2';
+    var cube1 = new Image();cube1.src = 'cube1.png';
+    var cube2 = new Image();cube2.src = 'cube2.png';
+    var cube3 = new Image();cube3.src = 'cube3.png';
+    var cube4 = new Image();cube4.src = 'cube4.png';
 
     var collisionRight = 0;
     var collisionLeft = 0;
     var rotation = 1;
     var lockblock = 0;
     var blocksOnThisLevel = 0;
-    var deleteblocksamount = 0;
-    //var blocktype = Math.floor(Math.random() * 3) + 1;
+    var color = cube1;
 
     var keysDown = {};
     window.addEventListener('keydown', function (e) {
@@ -61,15 +62,12 @@
 
         for (var t = 0; t < block.length; t++) {
             if (block[t].y == row) {
-                delete block[t].y;
-                delete block[t].x;
-                delete block[t].color;
-                delete block[t].width;
-                delete block[t].height;
+                block.splice(t,1);
             }
-            block[t].y += 20;
-            console.log("hej");
-
+            if (block[t].y <= row) {
+                block[t].y += 20;
+                console.log("hej");
+            }
         }
     }
 
@@ -96,7 +94,7 @@
             }
         } else {
             for (var t = 0; t < playerBlocks.length; t++) {
-                block.push(new create_blocks(playerBlocks[t].x + (playerRotationModifers[t].x * 20), playerBlocks[t].y + (playerRotationModifers[t].y * 20)));
+                block.push(new create_blocks(playerBlocks[t].x + (playerRotationModifers[t].x * 20), playerBlocks[t].y + (playerRotationModifers[t].y * 20), color));
                 playerBlocks[t].y = 0;
                 playerBlocks[t].x = 240;
             }
@@ -125,7 +123,6 @@
     function create_player(x, y) {
         this.x = x;
         this.y = y;
-        this.color = "purple";
         this.width = 20;
         this.height = 20;
     }
@@ -142,18 +139,19 @@
     playerRotationModifers.push(new create_player_rotation_modifier(0, 0));
     playerRotationModifers.push(new create_player_rotation_modifier(0, 0));
     //L
-    playerBlocks.push(new create_player(240, 0));
-    playerBlocks.push(new create_player(240, 0));
-    playerBlocks.push(new create_player(240, 0));
-    playerBlocks.push(new create_player(240, 0));
+    playerBlocks.push(new create_player(canvas.width/2, 0));
+    playerBlocks.push(new create_player(canvas.width/2, 0));
+    playerBlocks.push(new create_player(canvas.width/2, 0));
+    playerBlocks.push(new create_player(canvas.width/2, 0));
 
     var block = [];
-    function create_blocks(x, y) {
+    function create_blocks(x, y, color) {
         this.x = x;
         this.y = y;
+        this.color = color;
     }
     //spawn block
-    block.push(new create_blocks(0, canvas.height + 500));
+    block.push(new create_blocks(0, canvas.height + 500,color));
 
     randomBlock();
 
@@ -178,7 +176,7 @@
         ctx.fillStyle = "purple";
         for (var i = 0; i < playerBlocks.length; i++) {
             //ctx.fillRect(playerBlocks[i].x + (playerRotationModifers[i].x * 20), playerBlocks[i].y + (playerRotationModifers[i].y * 20), playerBlocks[i].width, playerBlocks[i].height);
-            ctx.drawImage(cube,playerBlocks[i].x + (playerRotationModifers[i].x * 20), playerBlocks[i].y + (playerRotationModifers[i].y * 20));
+            ctx.drawImage(color,playerBlocks[i].x + (playerRotationModifers[i].x * 20), playerBlocks[i].y + (playerRotationModifers[i].y * 20));
 
             //No haxing allowed
             if ((playerBlocks[i].x + (playerRotationModifers[i].x * 20)) > canvas.width - 20) {
@@ -195,7 +193,7 @@
 
         for (var t = 0; t < block.length; t++) {
             //ctx.fillRect(block[t].x, block[t].y, 20, 20);
-            ctx.drawImage(cube, block[t].x, block[t].y);
+            ctx.drawImage(block[t].color, block[t].x, block[t].y);
         }
 
 
