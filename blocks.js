@@ -1,5 +1,5 @@
 ﻿function randomBlock() {
-    blocktype = Math.floor(Math.random() * 5) + 1;
+    blocktype = Math.floor(Math.random() * 7) + 1;
     //blocktype = 7;
     rotation = 1;
     if (blocktype == 1) {
@@ -23,11 +23,11 @@
     }
     else if (blocktype == 6) {
         Z_block();
-        color = cube5;
+        color = cube6;
     }
     else if (blocktype == 7) {
         inverted_Z_block();
-        color = cube5;
+        color = cube7;
     }
 }
 
