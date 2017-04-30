@@ -24,6 +24,9 @@
     var lockblock = 0;
     var blocksOnThisLevel = 0;
     var color = cube1;
+    var red = Math.floor(Math.random() * 255) + 1;
+    var blue = Math.floor(Math.random() * 255) + 1;
+    var green = Math.floor(Math.random() * 255) + 1;
 
     var keysDown = {};
     window.addEventListener('keydown', function (e) {
@@ -69,6 +72,10 @@
                 console.log("hej");
             }
         }
+
+        red = Math.floor(Math.random() * 255) + 1;
+        blue = Math.floor(Math.random() * 255) + 1;
+        green = Math.floor(Math.random() * 255) + 1;
     }
 
     function fall() {
@@ -160,7 +167,7 @@
         ctx.fillStyle = "#f4f4f4";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         for (i = 0; i < 40; i++) {
-            ctx.fillStyle = "#ededed";
+            ctx.fillStyle = "rgba(" + red + "," + blue + "," + green + ",0.1)";
             for (i2 = 0; i2 < 25; i2++) {
                 ctx.fillRect(i2 * 40, i * 40, playerBlocks[0].width, playerBlocks[0].height);
             }
