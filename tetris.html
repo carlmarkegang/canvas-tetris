@@ -12,7 +12,7 @@
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
     canvas.width = 240;
-    canvas.height = 600;
+    canvas.height = 400;
     var cube1 = new Image();cube1.src = 'cube1.png';
     var cube2 = new Image();cube2.src = 'cube2.png';
     var cube3 = new Image();cube3.src = 'cube3.png';
@@ -65,27 +65,9 @@
 
     }
 
-    function remove_row(row){
 
-        for (var t = 0; t < block.length; t++) {
-            if (block[t].y == row) {
-                block.splice(t,1);
-            }
-            if (block[t].y <= row) {
-                block[t].y += 20;
-                console.log("hej");
-            }
-        }
-
-        red = Math.floor(Math.random() * 255) + 1;
-        blue = Math.floor(Math.random() * 255) + 1;
-        green = Math.floor(Math.random() * 255) + 1;
-        points+=100;
-        document.getElementById("points").innerHTML = points + " points";
-    }
 
     function fall() {
-
         for (var i = 0; i < playerBlocks.length; i++) {
             if (playerBlocks[i].y + (playerRotationModifers[i].y * 20) >= canvas.height - 20) {
                 lockblock = 1;
@@ -110,26 +92,52 @@
                 block.push(new create_blocks(playerBlocks[t].x + (playerRotationModifers[t].x * 20), playerBlocks[t].y + (playerRotationModifers[t].y * 20), color));
                 playerBlocks[t].y = 0;
                 playerBlocks[t].x = canvas.width/2;
+
             }
             lockblock = 0;
             randomBlock();
+            remove();
         }
 
 
+
+    }
+
+
+    function remove_row(row){
+        points+=100;
+        document.getElementById("points").innerHTML = points + " points";
+        for (var t = 0; t < block.length; t++) {
+            if (block[t].y == row) {
+                console.log(block);
+                block.splice(t,1);
+                console.log(block);
+            }
+            if (block[t].y <= row) {
+                block[t].y += 20;
+            }
+        }
+        red = Math.floor(Math.random() * 255) + 1;
+        blue = Math.floor(Math.random() * 255) + 1;
+        green = Math.floor(Math.random() * 255) + 1;
+
+
+    }
+    function remove(){
         blockloop: for (var i = 0; i < 30; i++) {
             blockloop2: for (var t = 0; t < block.length; t++) {
-                 if (block[t].y == i * 20) {
+                if (block[t].y == i * 20) {
                     blocksOnThisLevel++;
                     if (blocksOnThisLevel >= canvas.width/20) {
                         remove_row(i * 20);
-                        break blockloop2;
-
                     }
                 }
             }
             blocksOnThisLevel = 0;
         }
     }
+
+
 
     var playerBlocks = [];
 
@@ -242,8 +250,9 @@
 
     }
 
-    setInterval(fall, 700);
-    setInterval(draw, 30);
+    var fallInterval = setInterval(fall, 700);
+    //var fallInterval = setInterval(remove, 100);
+    var drawInterval = setInterval(draw, 30);
 </script>
 <div id="points"></div>
 </body>

@@ -1,6 +1,6 @@
 ﻿function randomBlock() {
     blocktype = Math.floor(Math.random() * 7) + 1;
-    //blocktype = 7;
+    //blocktype = 2;
     rotation = 1;
     if (blocktype == 1) {
         L_block();
