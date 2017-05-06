@@ -109,7 +109,7 @@
 
         for (var t = 0; t < block.length; t++) {
             if (block[t].y == row) {
-                block.splice(t,1);
+                delete block[t].y;
             }
         }
         for (var i = 0; i < block.length; i++) {
@@ -127,12 +127,13 @@
         blockloop: for (var i = 0; i < 20; i++) {
             blockloop2: for (var t = 0; t < block.length; t++) {
 
-                if (block[t].y == i * 20) {
+                if (block[t].y === i * 20) {
                     blocksOnThisLevel++;
-                    if (blocksOnThisLevel >= canvas.width/20) {
-                        remove_row(i * 20);
-                        break blockloop2;
-                    }
+                }
+                if (blocksOnThisLevel >= canvas.width/20) {
+                    remove_row(block[t].y);
+                    break blockloop2;
+
                 }
 
             }
