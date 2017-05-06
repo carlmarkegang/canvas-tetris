@@ -163,7 +163,7 @@ function spinBlock() {
             playerRotationModifers[2].y = 1;
             playerRotationModifers[3].x = -1;
             playerRotationModifers[3].y = -1;
-            rotation = 0;
+            rotation = 1;
         }
     }
 
@@ -211,7 +211,7 @@ function spinBlock() {
             playerRotationModifers[2].y = 0;
             playerRotationModifers[3].x = 2;
             playerRotationModifers[3].y = 0;
-            rotation = 0;
+            rotation = 1;
         }
     }
 
@@ -259,7 +259,7 @@ function spinBlock() {
             playerRotationModifers[2].y = 1;
             playerRotationModifers[3].x = 0;
             playerRotationModifers[3].y = -1;
-            rotation = 0;
+            rotation = 1;
         }
     }  else if (blocktype == 5) {
         if (rotation == 1){
@@ -298,7 +298,7 @@ function spinBlock() {
             playerRotationModifers[2].y = 1;
             playerRotationModifers[3].x = 0;
             playerRotationModifers[3].y = -1;
-            rotation = 0;
+            rotation = 1;
         }
     } else if (blocktype == 6) {
         if (rotation == 1 || rotation == 3){
@@ -319,7 +319,7 @@ function spinBlock() {
             playerRotationModifers[2].y = 0;
             playerRotationModifers[3].x = 0;
             playerRotationModifers[3].y = 1;
-            rotation = 0;
+            rotation = 1;
         }
     } else if (blocktype == 7) {
         if (rotation == 1 || rotation == 3){
@@ -340,7 +340,7 @@ function spinBlock() {
             playerRotationModifers[2].y = 0;
             playerRotationModifers[3].x = 1;
             playerRotationModifers[3].y = 1;
-            rotation = 0;
+            rotation = 1;
         }
     }
 }
