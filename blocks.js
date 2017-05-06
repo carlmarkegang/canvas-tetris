@@ -117,7 +117,7 @@ function inverted_Z_block() {
 }
 
 function spinBlock() {
-    console.log(blocktype + " " + rotation);
+    //console.log(blocktype + " " + rotation);
     //L BLOCK
     if (blocktype == 1) {
 

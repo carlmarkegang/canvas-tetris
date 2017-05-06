@@ -59,8 +59,8 @@
         if (83 in keysDown || 40 in keysDown) {
             fall();
         } else {
-            console.log("random block:" + blocktype + "placement " + (playerBlocks[0].x + (playerRotationModifers[0].x * 20)) + " " + 200);
-            console.log(keysDown);
+            //console.log("random block:" + blocktype + "placement " + (playerBlocks[0].x + (playerRotationModifers[0].x * 20)) + " " + 200);
+            //console.log(keysDown);
         }
 
     }
@@ -68,6 +68,7 @@
 
 
     function fall() {
+        document.getElementById("points").innerHTML = points + " points";
         for (var i = 0; i < playerBlocks.length; i++) {
             if (playerBlocks[i].y + (playerRotationModifers[i].y * 20) >= canvas.height - 20) {
                 lockblock = 1;
@@ -99,42 +100,45 @@
             remove();
         }
 
-
-
     }
 
 
     function remove_row(row){
         points+=100;
-        document.getElementById("points").innerHTML = points + " points";
+
         for (var t = 0; t < block.length; t++) {
             if (block[t].y == row) {
-                console.log(block);
                 block.splice(t,1);
-                console.log(block);
             }
-            if (block[t].y <= row) {
-                block[t].y += 20;
+        }
+        for (var i = 0; i < block.length; i++) {
+            if (block[i].y <= row) {
+                block[i].y += 20;
             }
         }
         red = Math.floor(Math.random() * 255) + 1;
         blue = Math.floor(Math.random() * 255) + 1;
         green = Math.floor(Math.random() * 255) + 1;
-
-
     }
+
     function remove(){
-        blockloop: for (var i = 0; i < 30; i++) {
+        document.getElementById("tester").innerHTML ="";
+        blockloop: for (var i = 0; i < 20; i++) {
             blockloop2: for (var t = 0; t < block.length; t++) {
+
                 if (block[t].y == i * 20) {
                     blocksOnThisLevel++;
                     if (blocksOnThisLevel >= canvas.width/20) {
                         remove_row(i * 20);
+                        break blockloop2;
                     }
                 }
+
             }
+            document.getElementById("tester").innerHTML +="<br>" + blocksOnThisLevel;
             blocksOnThisLevel = 0;
         }
+
     }
 
 
@@ -218,7 +222,7 @@
         }
 
 
-        // collision right
+        // collision 
         loop1:
             for (var i = 0; i < playerBlocks.length; i++) {
                 loop2: for (var t = 0; t < block.length; t++) {
@@ -230,17 +234,11 @@
                     } else {
                         collisionRight = 0;
                     }
-                }
-            }
 
-        // collision left
-        loop3:
-            for (var i = 0; i < playerBlocks.length; i++) {
-                loop4: for (var t = 0; t < block.length; t++) {
                     if (playerBlocks[i].y + (playerRotationModifers[i].y * 20) == block[t].y && playerBlocks[i].x + (playerRotationModifers[i].x * 20) == block[t].x + 20 || playerBlocks[i].x + (playerRotationModifers[i].x * 20) <= 0) {
                         collisionLeft = 1;
-                        break loop3;
-                        break loop4;
+                        break loop1;
+                        break loop2;
                     } else {
                         collisionLeft = 0;
                     }
@@ -248,12 +246,17 @@
             }
 
 
+
+
     }
 
     var fallInterval = setInterval(fall, 700);
-    //var fallInterval = setInterval(remove, 100);
     var drawInterval = setInterval(draw, 30);
+    //var fallInterval = setInterval(remove, 100);
+
 </script>
+<div id="tester" style="display: inline-block;float: right;"></div>
 <div id="points"></div>
+
 </body>
 </html>
