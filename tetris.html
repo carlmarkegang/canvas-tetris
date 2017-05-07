@@ -13,13 +13,13 @@
     var ctx = canvas.getContext("2d");
     canvas.width = 240;
     canvas.height = 400;
-    var cube1 = new Image();cube1.src = 'cube1.png';
-    var cube2 = new Image();cube2.src = 'cube2.png';
-    var cube3 = new Image();cube3.src = 'cube3.png';
-    var cube4 = new Image();cube4.src = 'cube4.png';
-    var cube5 = new Image();cube5.src = 'cube5.png';
-    var cube6 = new Image();cube6.src = 'cube6.png';
-    var cube7 = new Image();cube7.src = 'cube7.png';
+    var cube1 = new Image(); cube1.src = 'cube1.png';
+    var cube2 = new Image(); cube2.src = 'cube2.png';
+    var cube3 = new Image(); cube3.src = 'cube3.png';
+    var cube4 = new Image(); cube4.src = 'cube4.png';
+    var cube5 = new Image(); cube5.src = 'cube5.png';
+    var cube6 = new Image(); cube6.src = 'cube6.png';
+    var cube7 = new Image(); cube7.src = 'cube7.png';
 
     var collisionRight = 0;
     var collisionLeft = 0;
@@ -31,6 +31,8 @@
     var blue = Math.floor(Math.random() * 255) + 1;
     var green = Math.floor(Math.random() * 255) + 1;
     var points = 0;
+    var speed = 700;
+    var lose = 0;
 
     var keysDown = {};
     window.addEventListener('keydown', function (e) {
@@ -57,7 +59,7 @@
 
         }
 
-        if (83 in keysDown || 40 in keysDown) {
+        if (83 in keysDown && lose == 0 || 40 in keysDown && lose == 0) {
             fall();
         } else {
             //console.log("random block:" + blocktype + "placement " + (playerBlocks[0].x + (playerRotationModifers[0].x * 20)) + " " + 200);
@@ -65,7 +67,6 @@
         }
 
     }
-
 
 
     function fall() {
@@ -93,7 +94,7 @@
             for (var t = 0; t < playerBlocks.length; t++) {
                 block.push(new create_blocks(playerBlocks[t].x + (playerRotationModifers[t].x * 20), playerBlocks[t].y + (playerRotationModifers[t].y * 20), color));
                 playerBlocks[t].y = 0;
-                playerBlocks[t].x = canvas.width/2;
+                playerBlocks[t].x = canvas.width / 2;
 
             }
             lockblock = 0;
@@ -104,8 +105,11 @@
     }
 
 
-    function remove_row(row){
-        points+=100;
+    function remove_row(row) {
+        points += 100;
+        speed -= 10;
+        //clearInterval(fallInterval);
+        //var fallInterval = setInterval(fall, speed);
 
         for (var t = 0; t < block.length; t++) {
             if (block[t].y == row) {
@@ -122,28 +126,30 @@
         green = Math.floor(Math.random() * 255) + 1;
     }
 
-    function remove(){
-        document.getElementById("tester").innerHTML ="";
+    function remove() {
+        document.getElementById("tester").innerHTML = "";
         blockloop: for (var i = 0; i < 20; i++) {
             blockloop2: for (var t = 0; t < block.length; t++) {
 
                 if (block[t].y === i * 20) {
                     blocksOnThisLevel++;
                 }
-                if (blocksOnThisLevel >= canvas.width/20) {
+                if (blocksOnThisLevel >= canvas.width / 20) {
                     remove_row(block[t].y);
                     break blockloop2;
 
                 }
+                if (block[t].y == 0) {
+                    clearInterval(fallInterval);
+                    lose = 1;
+                }
 
             }
-            document.getElementById("tester").innerHTML +="<br>" + blocksOnThisLevel;
+            document.getElementById("tester").innerHTML += "<br>" + blocksOnThisLevel;
             blocksOnThisLevel = 0;
         }
 
     }
-
-
 
     var playerBlocks = [];
 
@@ -166,10 +172,10 @@
     playerRotationModifers.push(new create_player_rotation_modifier(0, 0));
     playerRotationModifers.push(new create_player_rotation_modifier(0, 0));
     //L
-    playerBlocks.push(new create_player(canvas.width/2, 0));
-    playerBlocks.push(new create_player(canvas.width/2, 0));
-    playerBlocks.push(new create_player(canvas.width/2, 0));
-    playerBlocks.push(new create_player(canvas.width/2, 0));
+    playerBlocks.push(new create_player(canvas.width / 2, 0));
+    playerBlocks.push(new create_player(canvas.width / 2, 0));
+    playerBlocks.push(new create_player(canvas.width / 2, 0));
+    playerBlocks.push(new create_player(canvas.width / 2, 0));
 
     var block = [];
     function create_blocks(x, y, color) {
@@ -178,7 +184,7 @@
         this.color = color;
     }
     //spawn block
-    block.push(new create_blocks(0, canvas.height + 500,color));
+    block.push(new create_blocks(0, canvas.height + 500, color));
 
     randomBlock();
 
@@ -203,7 +209,7 @@
         ctx.fillStyle = "purple";
         for (var i = 0; i < playerBlocks.length; i++) {
             //ctx.fillRect(playerBlocks[i].x + (playerRotationModifers[i].x * 20), playerBlocks[i].y + (playerRotationModifers[i].y * 20), playerBlocks[i].width, playerBlocks[i].height);
-            ctx.drawImage(color,playerBlocks[i].x + (playerRotationModifers[i].x * 20), playerBlocks[i].y + (playerRotationModifers[i].y * 20));
+            ctx.drawImage(color, playerBlocks[i].x + (playerRotationModifers[i].x * 20), playerBlocks[i].y + (playerRotationModifers[i].y * 20));
 
             //No haxing allowed
             if ((playerBlocks[i].x + (playerRotationModifers[i].x * 20)) > canvas.width - 20) {
@@ -248,11 +254,25 @@
             }
 
 
+        if (lose > 0) {
+            ctx.fillStyle = "rgba(10,10,10,0.02)";
+            for (i = 0; i < lose; i++) {
+
+                ctx.fillRect(0, canvas.height, canvas.width, -lose * 5);
+            }
+            ctx.fillStyle = "white";
+            ctx.font = "40px Arial";
+            ctx.fillText("SCORE ", 10, 50);
+            ctx.fillText(points, 10, 100);
+            if (lose < canvas.height) {
+                lose++;
+            }
+        }
 
 
     }
 
-    var fallInterval = setInterval(fall, 700);
+    var fallInterval = setInterval(fall, speed);
     var drawInterval = setInterval(draw, 30);
     //var fallInterval = setInterval(remove, 100);
 
