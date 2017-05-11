@@ -102,7 +102,7 @@
         } else {
             for (var t = 0; t < playerBlocks.length; t++) {
                 block.push(new create_blocks(playerBlocks[t].x + (playerRotationModifers[t].x * 20), playerBlocks[t].y + (playerRotationModifers[t].y * 20), color));
-                playerBlocks[t].y = -40;
+                playerBlocks[t].y = -20;
                 playerBlocks[t].x = canvas.width / 2;
 
             }
@@ -199,7 +199,7 @@
     randomBlock();
 
     function draw() {
-        if(dropToBottom==1){fall();fall();fall();fall();}
+        if(dropToBottom==1){fall();fall();fall();}
         // Background and Grid
         ctx.fillStyle = "#f4f4f4";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
