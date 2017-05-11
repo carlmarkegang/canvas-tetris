@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<canvas id="canvas" style="box-shadow: 1px 1px 31px #929292;"></canvas>
+<canvas id="canvas" style="box-shadow: 1px 1px 31px #929292;image-rendering: pixelated;"></canvas>
 <script src="blocks.js"></script>
 <script>
     var canvas = document.getElementById("canvas");
@@ -79,39 +79,38 @@
 
 
     function fall() {
-        document.getElementById("points").innerHTML = points + " points";
-        for (var i = 0; i < playerBlocks.length; i++) {
-            if (playerBlocks[i].y + (playerRotationModifers[i].y * 20) >= canvas.height - 20) {
-                lockblock = 1;
-                break;
-            }
-
-            // Landning collision
-            for (var t = 0; t < block.length; t++) {
-                if (playerBlocks[i].y + (playerRotationModifers[i].y * 20) == block[t].y - 20 && playerBlocks[i].x + (playerRotationModifers[i].x * 20) == block[t].x) {
+            document.getElementById("points").innerHTML = points + " points";
+            for (var i = 0; i < playerBlocks.length; i++) {
+                if (playerBlocks[i].y + (playerRotationModifers[i].y * 20) >= canvas.height - 20) {
                     lockblock = 1;
                     break;
                 }
-            }
-        }
 
-        if (lockblock == 0) {
-            for (var i = 0; i < playerBlocks.length; i++) {
-                playerBlocks[i].y += 20;
+                // Landning collision
+                for (var t = 0; t < block.length; t++) {
+                    if (playerBlocks[i].y + (playerRotationModifers[i].y * 20) == block[t].y - 20 && playerBlocks[i].x + (playerRotationModifers[i].x * 20) == block[t].x) {
+                        lockblock = 1;
+                        break;
+                    }
+                }
             }
-        } else {
-            for (var t = 0; t < playerBlocks.length; t++) {
-                block.push(new create_blocks(playerBlocks[t].x + (playerRotationModifers[t].x * 20), playerBlocks[t].y + (playerRotationModifers[t].y * 20), color));
-                playerBlocks[t].y = -20;
-                playerBlocks[t].x = canvas.width / 2;
 
+            if (lockblock == 0) {
+                for (var i = 0; i < playerBlocks.length; i++) {
+                    playerBlocks[i].y += 20;
+                }
+            } else {
+                for (var t = 0; t < playerBlocks.length; t++) {
+                    block.push(new create_blocks(playerBlocks[t].x + (playerRotationModifers[t].x * 20), playerBlocks[t].y + (playerRotationModifers[t].y * 20), color));
+                    playerBlocks[t].y = -20;
+                    playerBlocks[t].x = canvas.width / 2;
+
+                }
+                lockblock = 0;
+                dropToBottom = 0;
+                randomBlock();
+                remove();
             }
-            lockblock = 0;
-            dropToBottom=0;
-            randomBlock();
-            remove();
-        }
-
     }
 
 
@@ -137,7 +136,7 @@
     }
 
     function remove() {
-        document.getElementById("tester").innerHTML = "";
+        //document.getElementById("tester").innerHTML = "";
         blockloop: for (var i = 0; i < 20; i++) {
             blockloop2: for (var t = 0; t < block.length; t++) {
 
@@ -155,7 +154,7 @@
                 }
 
             }
-            document.getElementById("tester").innerHTML += "<br>" + blocksOnThisLevel;
+            //document.getElementById("tester").innerHTML += "<br>" + blocksOnThisLevel;
             blocksOnThisLevel = 0;
         }
 
@@ -284,6 +283,12 @@
     }
 
     var fallInterval = setInterval(fall, speed);
+    increaseSpeed();
+    function increaseSpeed(){
+    clearInterval(fallInterval);
+    speed -= 50;
+    fallInterval = setInterval(fall, speed);
+    }
     var drawInterval = setInterval(draw, 30);
     //var fallInterval = setInterval(remove, 100);
 
