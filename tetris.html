@@ -33,6 +33,7 @@
     var points = 0;
     var speed = 700;
     var lose = 0;
+    var dropToBottom = 0;
 
     var keysDown = {};
     window.addEventListener('keydown', function (e) {
@@ -44,6 +45,7 @@
     });
 
     function update(mod) {
+        if(lose ==0){
         for (var t = 0; t < playerBlocks.length; t++) {
             if (68 in keysDown && collisionRight != 1 || 39 in keysDown && collisionRight != 1) {
                 playerBlocks[t].x += 20;
@@ -59,11 +61,18 @@
 
         }
 
-        if (83 in keysDown && lose == 0 || 40 in keysDown && lose == 0) {
+        if (83 in keysDown || 40 in keysDown) {
             fall();
-        } else {
+        }
+
+        if (32 in keysDown) {
+            dropToBottom=1;
+        }
+
+            else {
             //console.log("random block:" + blocktype + "placement " + (playerBlocks[0].x + (playerRotationModifers[0].x * 20)) + " " + 200);
             //console.log(keysDown);
+        }
         }
 
     }
@@ -93,11 +102,12 @@
         } else {
             for (var t = 0; t < playerBlocks.length; t++) {
                 block.push(new create_blocks(playerBlocks[t].x + (playerRotationModifers[t].x * 20), playerBlocks[t].y + (playerRotationModifers[t].y * 20), color));
-                playerBlocks[t].y = 0;
+                playerBlocks[t].y = -40;
                 playerBlocks[t].x = canvas.width / 2;
 
             }
             lockblock = 0;
+            dropToBottom=0;
             randomBlock();
             remove();
         }
@@ -189,6 +199,7 @@
     randomBlock();
 
     function draw() {
+        if(dropToBottom==1){fall();fall();fall();fall();}
         // Background and Grid
         ctx.fillStyle = "#f4f4f4";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
