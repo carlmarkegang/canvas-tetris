@@ -74,6 +74,10 @@
         delete keysDown[e.keyCode];
     });
 
+    function getRandomColor(){
+        return Math.floor(Math.random() * 255) + 1;
+    }
+
     function update() {
         if (lose == 0) {
             for (var t = 0; t < playerBlocks.length; t++) {
@@ -138,9 +142,7 @@
 
     function remove_row(row) {
         points += 100;
-        speed -= 10;
-        //clearInterval(fallInterval);
-        //var fallInterval = setInterval(fall, speed);
+		increaseSpeed();
 
         for (var t = 0; t < block.length; t++) {
             if (block[t].y == row) {
@@ -155,10 +157,6 @@
         red = getRandomColor();
         blue = getRandomColor();
         green = getRandomColor();
-    }
-
-    function getRandomColor(){
-    	return Math.floor(Math.random() * 255) + 1;
     }
 
     function remove() {
@@ -275,7 +273,7 @@
 
     function increaseSpeed() {
         clearInterval(fallInterval);
-        speed -= 50;
+        speed -= 20;
         fallInterval = setInterval(stepLogic, speed);
     }
 
